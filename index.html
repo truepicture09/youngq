@@ -1,294 +1,40 @@
-<!DOCTYPE html>
 <html lang="ko">
 <head>
-  <meta charset="UTF-8">
+<meta charset="UTF-8">
+  <title>없어서 만들어본 복불복 달리기 🏃‍♂️</title>
   <title>없어서 만들어본 복불복 경주🏃‍♂️</title>
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <style>
-    body {
-      font-family: 'Segoe UI', sans-serif;
-      background-color: #f4f4f4;
-      margin: 0;
-      padding: 0;
-      text-align: center;
-    }
-    h1 {
-      font-size: 20px;
-      margin: 16px 0 4px;
-    }
-    #creator {
-      font-size: 12px;
-      color: #666;
-    }
-    .container {
-      width: 90vw;
-      margin: 0 auto;
-      max-width: 600px;
-    }
-    select, input, button {
-      font-size: 16px;
-      padding: 8px;
-      margin: 5px 0;
-      width: 100%;
-      box-sizing: border-box;
-    }
-    .inputRow {
-      display: flex;
-      gap: 5px;
-      margin-bottom: 5px;
-    }
-    .inputRow select {
-      width: 30%;
-    }
-    .inputRow input {
-      width: 70%;
-    }
-    .runner {
-      position: relative;
-      width: 100%;
-      height: 40px;
-      margin: 10px auto;
-      background: #fff;
-      border: 1px solid #ccc;
-      border-radius: 8px;
-      overflow: hidden;
-    }
-    .finish-line {
-      position: absolute;
-      top: 0;
-      right: 0;
-      width: 8px;
-      height: 100%;
-      background: repeating-linear-gradient(45deg, red, red 5px, white 5px, white 10px);
-      z-index: 1;
-    }
-    .character {
-      position: absolute;
-      top: 8px;
-      left: 0;
-      font-size: 18px;
-      z-index: 2;
-      white-space: nowrap;
-    }
-      @media screen and (max-width: 430px) {
-      .character {
-        font-size: 13px;
-        top: 6px;
-      }
-      .inputRow select,
-      .inputRow input {
-        font-size: 14px;
-      }
-      button {
-        font-size: 13px;
-        padding: 6px 10px;
-      }
-  </style>
-</head>
-    #loserPopup {
-      display: none;
-      position: fixed;
-      top: 30%;
-      left: 50%;
-      transform: translate(-50%, -50%);
-      background: #fff;
-      border: 2px solid red;
-      padding: 20px;
-      font-size: 20px;
-      font-weight: bold;
-      color: red;
-      border-radius: 12px;
-      box-shadow: 0 0 20px rgba(0,0,0,0.3);
-      z-index: 999;
-      animation: pop 0.5s ease;
-    }
-    #loserPopup button {
-      margin-top: 10px;
-      padding: 8px 16px;
-      background-color: #f44336;
-      color: white;
-      border: none;
-      border-radius: 4px;
-      cursor: pointer;
-    }
-    #rankingBoard {
-      display: none;
-      margin-top: 20px;
-    }
-    @keyframes pop {
-      0% { transform: translate(-50%, -50%) scale(0.8); opacity: 0; }
-      100% { transform: translate(-50%, -50%) scale(1); opacity: 1; }
-    }
-  </style>
-</head>
-<body>
-  <div class="container">
-    <h1>🐎 없어서 만든 복불복 경주 🐎</h1>
-    <div id="creator">만든이: 김영규 with ChatGPT</div>
-
-    <select id="numRacersSelect" onchange="changeNumRacers()">
-      <option value="2">참가자 2명</option>
-      <option value="3">참가자 3명</option>
-      <option value="4">참가자 4명</option>
-      <option value="5">참가자 5명</option>
-      <option value="6">참가자 6명</option>
-      <option value="7">참가자 7명</option>
-      <option value="8" selected>참가자 8명</option>
-    </select>
-
-    <div id="inputArea"></div>
-    <button onclick="shufflePairs()">🔀 자리 섞기</button>
-
-    <div id="raceTrack"></div>
-    <button onclick="startRace()">🏁 경주 시작</button>
-
-    <div id="loserPopup"></div>
-    <div id="rankingBoard">
-      <h2>🏆 최종 순위!</h2>
-      <ol id="rankingList"></ol>
-    </div>
-  </div>
-
-  <script>
-    const availableEmojis = ['🐶','🐱','🦊','🐻','🐼','🐨','🐯','🐸','🐵','🦄'];
-    let racers = [];
-
-    function changeNumRacers() {
-      const count = parseInt(document.getElementById("numRacersSelect").value);
-      racers = Array.from({length: count}, (_, i) => ({
-        emoji: availableEmojis[i % availableEmojis.length],
-        name: ""
-      }));
-      renderInputs();
-    }
-
-    function renderInputs() {
-      const inputArea = document.getElementById("inputArea");
-      inputArea.innerHTML = '';
-      racers.forEach((racer, i) => {
-        const row = document.createElement("div");
-        row.className = "inputRow";
-
-        const select = document.createElement("select");
-        availableEmojis.forEach(emoji => {
-          const option = document.createElement("option");
-          option.value = emoji;
-          option.textContent = emoji;
-          if (emoji === racer.emoji) option.selected = true;
-          select.appendChild(option);
-        });
-        select.onchange = () => racer.emoji = select.value;
-
-        const input = document.createElement("input");
-        input.type = "text";
-        input.placeholder = `참가자 ${i+1}`;
-        input.value = racer.name;
-        input.setAttribute("data-index", i);
-        input.oninput = () => racer.name = input.value;
-
-        row.appendChild(select);
-        row.appendChild(input);
-        inputArea.appendChild(row);
-      });
-    }
-
-    function shufflePairs() {
-      for (let i = racers.length - 1; i > 0; i--) {
-        const j = Math.floor(Math.random() * (i + 1));
-        [racers[i], racers[j]] = [racers[j], racers[i]];
-      }
-      renderInputs();
-    }
-
-    function getRandomSpeed() {
-      const rand = Math.random();
-      if (rand < 0.2) return 0.1;
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<style>
+body {
+@@ -188,29 +188,29 @@
+function getRandomSpeed() {
+const rand = Math.random();
+if (rand < 0.2) return 0.1;
+      else if (rand < 0.4) return 0,25;
+      else if (rand < 0.6) return 0.5;
       else if (rand < 0.4) return 0,2;
       else if (rand < 0.6) return 0.3;
-      else if (rand < 0.8) return 2;
-      else return 4;
-    }
+else if (rand < 0.8) return 2;
+else return 4;
+}
 
-    function startRace() {
-      const track = document.getElementById("raceTrack");
-      track.innerHTML = "";
-      document.getElementById("rankingBoard").style.display = "none";
-      document.getElementById("rankingList").innerHTML = "";
-      document.getElementById("loserPopup").style.display = "none";
+function startRace() {
+const track = document.getElementById("raceTrack");
+track.innerHTML = "";
+document.getElementById("rankingBoard").style.display = "none";
+document.getElementById("rankingList").innerHTML = "";
+document.getElementById("loserPopup").style.display = "none";
 
-      racers.forEach((r, i) => {
-        r.name = document.querySelector(`input[data-index='${i}']`).value || `참가자${i+1}`;
-      });
+racers.forEach((r, i) => {
+r.name = document.querySelector(`input[data-index='${i}']`).value || `참가자${i+1}`;
+});
 
-      const finishOrder = [];
-      const finishPosition = 600 - 50;
+const finishOrder = [];
+const finishPosition = 600 - 50;
 
-      racers.forEach((racer, index) => {
-        const line = document.createElement("div");
-        line.className = "runner";
+racers.forEach((racer, index) => {
+const line = document.createElement("div");
+line.className = "runner";
 
-        const finishLine = document.createElement("div");
-        finishLine.className = "finish-line";
-        line.appendChild(finishLine);
-
-        const char = document.createElement("div");
-        char.className = "character";
-        char.innerText = `${racer.name} ${racer.emoji}`;
-        line.appendChild(char);
-        track.appendChild(line);
-
-        let pos = 0;
-        const interval = setInterval(() => {
-          const speed = getRandomSpeed();
-          pos += speed;
-          if (pos >= finishPosition) {
-            pos = finishPosition;
-            char.style.left = `${pos}px`;
-            clearInterval(interval);
-            if (!finishOrder.includes(racer)) {
-              finishOrder.push(racer);
-              if (finishOrder.length === racers.length) showResult(finishOrder);
-            }
-            return;
-          }
-          char.style.left = `${pos}px`;
-        }, 1000 / 60);
-      });
-    }
-
-    function showResult(order) {
-      order.forEach((racer, idx) => {
-        racer.rank = idx + 1;
-        racer.finalText = `${racer.name} ${racer.emoji} (${racer.rank}등)`;
-      });
-
-      order.forEach(racer => {
-        const char = [...document.querySelectorAll('.character')].find(el => el.textContent.includes(racer.name));
-        if (char) char.innerText = racer.finalText;
-      });
-
-      const loser = order[order.length - 1];
-      const popup = document.getElementById("loserPopup");
-      popup.innerHTML = `☕️ 꼴찌는 <strong>${loser.name}</strong>!<br>벌칙 당첨!<br><button onclick="this.parentElement.style.display='none'">닫기</button>`;
-      popup.style.display = "block";
-
-      const rankingList = document.getElementById("rankingList");
-      order.forEach(r => {
-        const li = document.createElement("li");
-        li.innerText = `${r.emoji} ${r.name}`;
-        rankingList.appendChild(li);
-      });
-      document.getElementById("rankingBoard").style.display = "block";
-    }
-
-    // ✅ DOM 로드 완료 후 초기화 (모바일 대응 핵심)
-    document.addEventListener('DOMContentLoaded', () => {
-      racers = Array.from({length: 8}, (_, i) => ({
-        emoji: availableEmojis[i % availableEmojis.length],
-        name: ""
-      }));
-      renderInputs();
-    });
-  </script>
-</body>
-</html>
+const finishLine = document.createElement("div");
+finishLine.className = "finish-line";
