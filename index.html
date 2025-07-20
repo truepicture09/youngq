@@ -109,7 +109,7 @@
 </head>
 <body>
   <div class="container">
-    <h1>🐎 없어서 만든 복불복 경주 v1.1 </h1>
+    <h1>🐎 없어서 만든 복불복 경주 v1.2 </h1>
     <div id="creator">만든이: 김영규 with ChatGPT</div>
 
     <select id="numRacersSelect" onchange="changeNumRacers()">
@@ -188,11 +188,11 @@
 
     function getRandomSpeed() {
       const rand = Math.random();
-      if (rand < 0.3) return 0.01;
-      else if (rand < 0.5) return 0.05;
+      if (rand < 0.3) return 1;
+      else if (rand < 0.5) return 0.01;
       else if (rand < 0.7) return 0.1;
-      else if (rand < 0.9) return 0.5;
-      else return -5;
+      else if (rand < 0.9) return 0.05;
+      else return 5;
     }
 
     function startRace() {
