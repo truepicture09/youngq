@@ -70,6 +70,19 @@
       z-index: 2;
       white-space: nowrap;
     }
+      @media screen and (max-width: 430px) {
+      .character {
+        font-size: 13px;
+        top: 6px;
+      }
+      .inputRow select,
+      .inputRow input {
+        font-size: 14px;
+      }
+      button {
+        font-size: 13px;
+        padding: 6px 10px;
+      }
   </style>
 </head>
     #loserPopup {
@@ -189,11 +202,11 @@
 
     function getRandomSpeed() {
       const rand = Math.random();
-      if (rand < 0.2) return 0.05;
-      else if (rand < 0.4) return 0,1;
-      else if (rand < 0.6) return 0.2;
-      else if (rand < 0.8) return 5;
-      else return 10;
+      if (rand < 0.2) return 0.1;
+      else if (rand < 0.4) return 0,2;
+      else if (rand < 0.6) return 0.3;
+      else if (rand < 0.8) return 2;
+      else return 4;
     }
 
     function startRace() {
