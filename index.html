@@ -2,7 +2,7 @@
 <html lang="ko">
 <head>
   <meta charset="UTF-8">
-  <title>복불복 달리기 경주 🏃‍♂️</title>
+  <title>없어서 만들어본 복불복 경주 🏃‍♂️</title>
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <style>
     body {
@@ -109,7 +109,7 @@
 </head>
 <body>
   <div class="container">
-    <h1>🐎 복불복 경주 - 꼴찌 벌칙!</h1>
+    <h1>🐎 없어서 만든 복불복 경주!</h1>
     <div id="creator">만든이: 김영규 with ChatGPT</div>
 
     <select id="numRacersSelect" onchange="changeNumRacers()">
@@ -123,7 +123,7 @@
     </select>
 
     <div id="inputArea"></div>
-    <button onclick="shufflePairs()">🔀 동물+이름 섞기</button>
+    <button onclick="shufflePairs()">🔀 위치 섞기</button>
 
     <div id="raceTrack"></div>
     <button onclick="startRace()">🏁 경주 시작</button>
@@ -188,11 +188,11 @@
 
     function getRandomSpeed() {
       const rand = Math.random();
-      if (rand < 0.3) return 0.5;
-      else if (rand < 0.5) return 1;
-      else if (rand < 0.7) return 2;
-      else if (rand < 0.9) return 3;
-      else return 6;
+      if (rand < 0.3) return 0.01;
+      else if (rand < 0.5) return 0.05;
+      else if (rand < 0.7) return 0.1;
+      else if (rand < 0.9) return 0.5;
+      else return 5;
     }
 
     function startRace() {
